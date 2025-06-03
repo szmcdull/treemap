@@ -4,26 +4,26 @@
 //
 // Example:
 //
-//     package main
+//	package main
 //
-//     import (
-//         "fmt"
+//	import (
+//	    "fmt"
 //
-//         "github.com/igrmk/treemap/v2"
-//     )
+//	    "github.com/igrmk/treemap/v2"
+//	)
 //
-//     func main() {
-//         tree := treemap.New[int, string]()
-//         tree.Set(1, "World")
-//         tree.Set(0, "Hello")
-//         for it := tree.Iterator(); it.Valid(); it.Next() {
-//             fmt.Println(it.Key(), it.Value())
-//         }
-//     }
+//	func main() {
+//	    tree := treemap.New[int, string]()
+//	    tree.Set(1, "World")
+//	    tree.Set(0, "Hello")
+//	    for it := tree.Iterator(); it.Valid(); it.Next() {
+//	        fmt.Println(it.Key(), it.Value())
+//	    }
+//	}
 //
-//     // Output:
-//     // 0 Hello
-//     // 1 World
+//	// Output:
+//	// 0 Hello
+//	// 1 World
 package treemap
 
 import "golang.org/x/exp/constraints"
@@ -131,6 +131,14 @@ func (t *TreeMap[Key, Value]) Get(id Key) (Value, bool) {
 		node = t.endNode
 	}
 	return node.value, node != t.endNode
+}
+
+func (t *TreeMap[Key, Value]) GetRef(id Key) (*Value, bool) {
+	node := t.findNode(id)
+	if node == nil {
+		node = t.endNode
+	}
+	return &node.value, node != t.endNode
 }
 
 // Contains checks if key exists in a map.
@@ -363,8 +371,9 @@ func (t *TreeMap[Key, Value]) insertFixup(x *node[Key, Value]) {
 	}
 }
 
+// noinspection GoNilness
+//
 //nolint:gocyclo
-//noinspection GoNilness
 func removeNode[Key, Value any](
 	root, z *node[Key, Value],
 ) {
