@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/igrmk/treemap/v2"
+	"github.com/szmcdull/treemap/v2"
 )
 
 func main() {
